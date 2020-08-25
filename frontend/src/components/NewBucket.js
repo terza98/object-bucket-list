@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
 //API import
-import getBucketLocation from '../api/auth-service.js'
+import Service from '../api/auth-service.js'
 
 export default function NewBucket(props){
     const [bucketLocations, loadBucketLocation] = useState([""]);
@@ -15,22 +15,21 @@ export default function NewBucket(props){
 
     useEffect(() => {
         // Update the bucket location
-        getBucketLocation()
-            .then(res => res.json())
+        Service.getBucketLocation()
             .then(
                 (result) => {
-                    console.log(result);
+                    console.log(result.data.locations);
                     setLoad(true);
-                    loadBucketLocation(result.items);
+                    loadBucketLocation(result.data.locations);
                 },
                 // Note: hanling errors here
                 (error) => {
                     setError(error);
                 }
             )
-    });
+    }, [] );
     return(
-        props.new&&
+        props.new &&
         <>
             <p className="text-left">{props.title}</p>
             <Container className="innerWrapper">
@@ -45,7 +44,7 @@ export default function NewBucket(props){
                             <Form.Control as="select">
                                 <option value="0">Choose...</option>
                                 {bucketLocations.map( (item,index) =>
-                                    <option key={index} value={index}>{item}</option>
+                                    <option key={index} value={item.name}>{item.name}</option>
                                 )}
                             </Form.Control>
                         </Col>

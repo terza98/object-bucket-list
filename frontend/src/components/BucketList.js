@@ -7,6 +7,9 @@ import Col from 'react-bootstrap/Col';
 import NewBucket from './NewBucket.js';
 import AllBuckets from './AllBuckets.js';
 
+//API 
+import Service from './Service.js';
+
 export default function BucketList(props){
     const [newBucket, setNewBucket] = useState(false);
     const handleNewBucket = () => {

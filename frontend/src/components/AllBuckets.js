@@ -1,13 +1,37 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 
+//API import
+import Service from '../api/auth-service.js'
+
 export default function AllBuckets(props){
     const [countBuckets, updateBucketsCount] = useState(0);
+    const [bucketList, loadBucketList] = useState([""]);
+    const [isLoaded, setLoad] = useState(false);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        // Update the bucket location
+        Service.getBucketList()
+            .then(
+                (result) => {
+                    console.log(result.data);
+                    setLoad(true);
+                    updateBucketsCount(result.data.buckets.length);
+                    loadBucketList(result.data.buckets);
+                },
+                // Note: hanling errors here
+                (error) => {
+                    setError(error);
+                }
+            )
+    }, [] );
     return(
+        isLoaded && (
         <Container className="innerWrapper">
             <Row>
                 <Col className="text-left">  
@@ -28,17 +52,20 @@ export default function AllBuckets(props){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Best Storage</td>
-                            <td>Pics</td>
-                        </tr>
-                        <tr>
-                            <td>Kranj</td>
-                            <td colSpan="2">Ljubljana</td>
-                        </tr>
+                            {bucketList.map( (item,index) =>
+                                <>
+                                    <tr key={item.id}>
+                                        <td>{item.name}</td>
+                                    </tr>
+                                    <tr key={item.id}>
+                                        <td>{item.name}</td>
+                                    </tr>
+                                </>
+                            )}   
                     </tbody>
                 </Table>
             </Row>
         </Container>
+        )
     );
 }

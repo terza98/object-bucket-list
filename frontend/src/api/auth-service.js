@@ -1,13 +1,28 @@
-const accessToken = process.env.REACT_APP_TOKEN;
+import 'dotenv/config.js';
+const axios = require('axios');
+const accessToken = 'f4ca4366-d77a-419e-9f1f-b27b8360f32f';
+const API_URL = 'https://challenge.3fs.si/storage/';
+
 const config = {
-    headers: { Authorization: `Bearer ${accessToken}` }
+    headers: { 
+        'Authorization': `Token ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
 };
-const API_URL = process.env.REACT_APP_API_URL;
 
-export default function getBucketLocation(){
-    return fetch(API_URL + 'location', config)
-    .then(response => response.json())
-    .then(data => console.log(data));;
+class Service{
+    //Buckets
+    getBucketLocation(){
+        return axios.get(API_URL + 'locations', config);
+    }
+    getBucketList(){
+        return axios.get(API_URL + 'buckets', config);
+    }
+    createBucket(name, location){
+        return axios.post(API_URL + 'buckets', config);
+    }
+
+    
 }
-
-  
+export default new Service();
