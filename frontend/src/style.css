@@ -36,4 +36,35 @@
       transform: rotate(360deg);
     }
   }
-  
+
+/* Components */
+#navbar{
+    padding:8px 8%; 
+    background-color: #666666 !important;
+}
+#wrapper{
+    height: 100vh; 
+    padding-top: 1%;
+    background-color: #eff2f4;
+}
+.innerWrapper{
+    background-color: #fff;
+    padding:2%;
+    margin: 1% 0;
+}
+.btn-primary{
+    color: #eebfbf !important;
+    background-color: #393e6f !important;
+}
+.table thead th, .table tbody td{
+    text-align: left;
+}
+thead{
+    background-color: #cccccc;
+}
+.required:after{
+    content:'*';
+}
+.form-label{
+    font-weight: bold;
+}
