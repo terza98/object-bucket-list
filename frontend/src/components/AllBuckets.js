@@ -62,8 +62,9 @@ export default function AllBuckets(props){
                             {bucketList.map( (item,index) =>
                                 <tr key={index} id={item.id}>
                                     <td>{item.name}</td>
-                                    <td>{item.location.name}</td>
-                                    {console.log(item.location)}
+                                    {item.location !== undefined &&
+                                        <td>{item.location.name}</td>
+                                    }   
                                 </tr>
                             )}   
                     </tbody>
