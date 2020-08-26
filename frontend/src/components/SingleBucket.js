@@ -98,6 +98,14 @@ export default function SingleBucket(props){
         return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
      }
 
+    const totalSize = () => {
+        let total = 0;
+        filesList.map( (item,index) =>
+            total += item.size
+        );
+        return bytesToSize(total);
+    }
+
     return(
         isLoaded && (
         <Container className="innerWrapper">
@@ -156,6 +164,7 @@ export default function SingleBucket(props){
                     <div className="text-left">
                         <p>Bucket Name: {details.name}</p>
                         <p>Location: {details.location.name}</p>
+                        <p>Storage Size: {totalSize()}</p>
                     </div>
                     }
                 </Tab>
