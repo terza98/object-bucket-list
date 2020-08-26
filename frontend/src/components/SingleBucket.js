@@ -91,6 +91,13 @@ export default function SingleBucket(props){
         return newDate;
     }
 
+    const bytesToSize = (bytes) => {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Byte';
+        let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+     }
+
     return(
         isLoaded && (
         <Container className="innerWrapper">
@@ -137,7 +144,7 @@ export default function SingleBucket(props){
                                                 {formatDate(item.last_modified)}
                                             </td>
                                         }
-                                        <td>{item.size}</td>
+                                        <td>{bytesToSize(item.size)}</td>
                                     </tr>
                                 )}   
                             </tbody>
