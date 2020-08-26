@@ -9,6 +9,13 @@ const config = {
         'Accept': 'application/json'
     }
 };
+const fileConfig = {
+    headers: { 
+        'Authorization': `Token ${accessToken}`,
+        'content-type': 'multipart/form-data',
+        'Accept': 'multipart/form-data'
+    }
+};
 
 class Service{
     getBucketLocation(){
@@ -30,10 +37,13 @@ class Service{
     getObjectsList(bucket){
         return axios.get(API_URL + `buckets/${bucket}/objects`, config);
     }
-    createFile(bucket, object){
-        return axios.post(API_URL + `buckets/${bucket}/objects`,{object}, config);
+    uploadFile(bucket, file){
+        const formData = new FormData();
+        formData.append('file',file)
+        
+        return axios.post(API_URL + `buckets/${bucket}/objects`, formData, fileConfig);
     }
-    createFile(bucket, objectId){
+    deleteFile(bucket, objectId){
         return axios.delete(API_URL + `buckets/${bucket}/objects/${objectId}`, config);
     }
 }

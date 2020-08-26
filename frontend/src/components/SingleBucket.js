@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -22,6 +22,10 @@ export default function SingleBucket(props){
 
     //details
     const [details, setDetails] = useState("");
+
+    const [formData, setFormData] = useState(null);
+
+    const fileInput = useRef(null);
 
     useEffect(() => {
         // Update files in bucket
@@ -64,6 +68,29 @@ export default function SingleBucket(props){
                 }
             )
     }
+
+    const uploadFile = (e) => {
+        Service.uploadFile(props.id, e.target.files[0])
+        .then(
+            (result) => {
+                console.log(result);
+            },
+            (error) => {
+                setError(error);
+            }
+        )
+    }
+    const handleUpload = () => {
+        fileInput.current.click();
+    }
+
+    const formatDate = (date) => {
+        let newDate = date.split('-').join('.').replace('T', ' at ');
+        const index = newDate.indexOf(':')+6;
+        newDate = newDate.substring(0, index);
+        return newDate;
+    }
+
     return(
         isLoaded && (
         <Container className="innerWrapper">
@@ -73,7 +100,8 @@ export default function SingleBucket(props){
                     {key==="files" ?
                         <>
                             <Button onClick={props.showNewBucket}>Delete Object</Button>  
-                            <Button onClick={props.showNewBucket}>Upload Object</Button>  
+                            <Button onClick={handleUpload}>Upload Object</Button>
+                            <input style={{display: "none"}} ref={fileInput}  type="file" onChange={uploadFile} />
                         </>
                     :
                         <>
@@ -104,7 +132,11 @@ export default function SingleBucket(props){
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
                                         </td>
-                                        <td>{item.modified}</td>
+                                        {item.last_modified!==undefined &&
+                                            <td>
+                                                {formatDate(item.last_modified)}
+                                            </td>
+                                        }
                                         <td>{item.size}</td>
                                     </tr>
                                 )}   
