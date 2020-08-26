@@ -14,15 +14,14 @@ export default function AllBuckets(props){
     const [isLoaded, setLoad] = useState(false);
     const [error, setError] = useState("");
 
-    // const [bucketNew, setBucket] = useState("");
-
     const addNewBucket = () => {
-        const newBucketList = [...bucketList, props.bucket];
-        loadBucketList(newBucketList);
+        loadBucketList([...bucketList, props.bucket]);
+        console.log(props.bucket);
     }
 
     useEffect(() => {
-        // Update the bucket location
+        // Update the buckets
+        addNewBucket();
         Service.getBucketList()
             .then(
                 (result) => {
@@ -60,8 +59,8 @@ export default function AllBuckets(props){
                     </thead>
                     <tbody>
                             {bucketList.map( (item,index) =>
-                                <tr key={index} id={item.id}>
-                                    <td>{item.name}</td>
+                                <tr onClick={() => props.showSingleBucket(item.name, item.id)} key={index} id={item.id}>
+                                    <td><span className="bucket-name">{item.name}</span></td>
                                     {item.location !== undefined &&
                                         <td>{item.location.name}</td>
                                     }   

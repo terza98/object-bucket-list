@@ -11,7 +11,6 @@ const config = {
 };
 
 class Service{
-    //Buckets
     getBucketLocation(){
         return axios.get(API_URL + 'locations', config);
     }
@@ -22,7 +21,20 @@ class Service{
         return axios.post(API_URL + 'buckets', 
             {name, location}, config);
     }
-
-    
+    getSingleBucket(bucket){
+        return axios.get(API_URL + `buckets/${bucket}`, config);
+    }
+    deleteBucket(bucket){
+        return axios.delete(API_URL + `buckets/${bucket}`, config);
+    }
+    getObjectsList(bucket){
+        return axios.get(API_URL + `buckets/${bucket}/objects`, config);
+    }
+    createFile(bucket, object){
+        return axios.post(API_URL + `buckets/${bucket}/objects`,{object}, config);
+    }
+    createFile(bucket, objectId){
+        return axios.delete(API_URL + `buckets/${bucket}/objects/${objectId}`, config);
+    }
 }
 export default new Service();

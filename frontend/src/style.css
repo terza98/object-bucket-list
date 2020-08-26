@@ -68,3 +68,8 @@ thead{
 .form-label{
     font-weight: bold;
 }
+.bucket-name:hover{
+    background-color:#f3c0c0;
+    cursor:pointer;
+}
+.bucket-name{padding:10px;}
