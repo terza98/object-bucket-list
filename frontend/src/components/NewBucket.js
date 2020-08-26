@@ -12,13 +12,14 @@ export default function NewBucket(props){
     const [bucketLocations, loadBucketLocation] = useState([""]);
     const [isLoaded, setLoad] = useState(false);
     const [error, setError] = useState("");
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState("");
 
     useEffect(() => {
         // Update the bucket location
         Service.getBucketLocation()
             .then(
                 (result) => {
-                    console.log(result.data.locations);
                     setLoad(true);
                     loadBucketLocation(result.data.locations);
                 },
@@ -28,6 +29,15 @@ export default function NewBucket(props){
                 }
             )
     }, [] );
+
+    function handleNameChange(e){
+        setName(e.target.value);
+    }
+    function handleLocationChange(e){
+        setLocation(e.target.value);
+        console.log(e.target.value);
+    }
+
     return(
         props.new &&
         <>
@@ -37,21 +47,21 @@ export default function NewBucket(props){
                     <Row>
                         <Col className="text-left">
                             <Form.Label className="required">Bucket Name</Form.Label>
-                            <Form.Control placeholder="MyNewStorage" />
+                            <Form.Control onChange={handleNameChange} value={name} placeholder="MyNewStorage" />
                         </Col>
                         <Col className="text-left">
                             <Form.Label className="required">Bucket Location</Form.Label>
-                            <Form.Control as="select">
+                            <Form.Control onChange={handleLocationChange} value={location} as="select">
                                 <option value="0">Choose...</option>
                                 {bucketLocations.map( (item,index) =>
-                                    <option key={index} value={item.name}>{item.name}</option>
+                                    <option key={index} value={item.id}>{item.name}</option>
                                 )}
                             </Form.Control>
                         </Col>
                     </Row>  
                     <Row className="text-left">
                         {props.new&&
-                            <Button style={{margin: '15px'}} onClick={props.handleNewBucket}>Create Bucket</Button>  
+                            <Button style={{margin: '15px'}} onClick={() => props.handleNewBucket(name, location)}>Create Bucket</Button>  
                         }   
                     </Row>
                 </Form>

@@ -14,6 +14,13 @@ export default function AllBuckets(props){
     const [isLoaded, setLoad] = useState(false);
     const [error, setError] = useState("");
 
+    // const [bucketNew, setBucket] = useState("");
+
+    const addNewBucket = () => {
+        const newBucketList = [...bucketList, props.bucket];
+        loadBucketList(newBucketList);
+    }
+
     useEffect(() => {
         // Update the bucket location
         Service.getBucketList()
@@ -39,7 +46,7 @@ export default function AllBuckets(props){
                 </Col>
                 <Col className="text-right">
                     {!props.new&&
-                        <Button onClick={props.handleNewBucket}>Create New Bucket</Button>  
+                        <Button onClick={props.showNewBucket}>Create New Bucket</Button>  
                     }  
                 </Col>
             </Row>  
@@ -53,14 +60,11 @@ export default function AllBuckets(props){
                     </thead>
                     <tbody>
                             {bucketList.map( (item,index) =>
-                                <>
-                                    <tr key={item.id}>
-                                        <td>{item.name}</td>
-                                    </tr>
-                                    <tr key={item.id}>
-                                        <td>{item.name}</td>
-                                    </tr>
-                                </>
+                                <tr key={index} id={item.id}>
+                                    <td>{item.name}</td>
+                                    <td>{item.location.name}</td>
+                                    {console.log(item.location)}
+                                </tr>
                             )}   
                     </tbody>
                 </Table>
