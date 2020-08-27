@@ -103,6 +103,11 @@ export default function SingleBucket(props){
         let newDate = date.split('-').join('.').replace('T', ' at ');
         const index = newDate.indexOf(':')+6;
         newDate = newDate.substring(0, index);
+        const newIndex = newDate.indexOf(' at');
+        let newDateFirst = newDate.substring(0, newIndex);
+        newDateFirst = newDateFirst.split('.').reverse().join('.');
+        let newDateSecond = newDate.substring(newIndex, newDate.length);
+        newDate = newDateFirst + newDateSecond;
         return newDate;
     }
 
@@ -137,6 +142,20 @@ export default function SingleBucket(props){
         )
     }
 
+    const sortFiles = (a, b) => {
+        // Use toUpperCase() to ignore character casing
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+      
+        let comparison = 0;
+        if (nameA > nameB) {
+          comparison = 1;
+        } else if (nameA < nameB) {
+          comparison = -1;
+        }
+        return comparison;
+    }
+    
     return(
         isLoaded && (
         <Container className="innerWrapper">
@@ -193,7 +212,7 @@ export default function SingleBucket(props){
                                 </tr>
                             </thead>
                             <tbody>
-                                {filesList.map( (item,index) =>
+                                {filesList.sort(sortFiles).map( (item,index) =>
                                     <tr onClick={() => handleFileSelect(index)} key={index} id={item.id}>
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
