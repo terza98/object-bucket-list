@@ -14,34 +14,21 @@ export default function AllBuckets(props){
     const [isLoaded, setLoad] = useState(false);
     const [error, setError] = useState("");
 
-    const addNewBucket = () => {
-        loadBucketList([...bucketList, props.bucket]);
-        console.log(props.bucket);
-    }
-
     useEffect(() => {
         // Update the buckets
-        addNewBucket();
-        Service.getBucketList()
-            .then(
-                (result) => {
-                    console.log(result.data);
-                    setLoad(true);
-                    updateBucketsCount(result.data.buckets.length);
-                    loadBucketList(result.data.buckets);
-                },
-                // Note: hanling errors here
-                (error) => {
-                    setError(error);
-                }
-            )
-    }, [] );
+        loadBucketList(props.bucket);
+        setLoad(true);
+        updateBucketsCount(props.bucketsCount);
+        console.log(props.bucket);
+
+    }, [props.bucket, props.bucketsCount] );
+
     return(
         isLoaded && (
         <Container className="innerWrapper">
             <Row>
                 <Col className="text-left">  
-                    <p>{props.title}({countBuckets})</p>              
+                    <p>{props.title}({props.bucketsCount})</p>              
                 </Col>
                 <Col className="text-right">
                     {!props.new&&
@@ -58,7 +45,7 @@ export default function AllBuckets(props){
                         </tr>
                     </thead>
                     <tbody>
-                            {bucketList.map( (item,index) =>
+                            {props.bucket!==undefined && props.bucket.map( (item,index) =>
                                 <tr onClick={() => props.showSingleBucket(item.name, item.id)} key={index} id={item.id}>
                                     <td><span className="bucket-name">{item.name}</span></td>
                                     {item.location !== undefined &&

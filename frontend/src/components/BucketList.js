@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -16,15 +16,39 @@ export default function BucketList(props){
     const [singleBucket, setSingleBucket] = useState(false);
     const [singleBucketName, setSingleBucketName] = useState("");
     const [singleBucketId, setSingleBucketId] = useState("");
+    const [isLoaded, setLoad] = useState(false);
     const [error, setError] = useState("");
-    const [addedBucket, addNewBucket] = useState({});
+
+    const [countBuckets, updateBucketsCount] = useState(0);
+    const [bucketList, loadBucketList] = useState([""]);
+
+    useEffect(() => {
+        // Load/update the buckets
+        Service.getBucketList()
+            .then(
+                (result) => {
+                    console.log(result.data);
+                    updateBucketsCount(result.data.buckets.length);
+                    loadBucketList(result.data.buckets);
+                    setLoad(true);
+                },
+                // Note: hanling errors here
+                (error) => {
+                    setError(error);
+                }
+            )
+    }, [] );
+    
 
     const handleNewBucket = (name, location) => {
         Service.createBucket(name,location).then(
             (result) => {
                 console.log(result.data.bucket);
                 setNewBucket(!newBucket);
-                addNewBucket(result.data.bucket);
+                
+                loadBucketList([...bucketList, result.data.bucket]);
+                updateBucketsCount(countBuckets+1);
+
             },
             // Note: handling errors here
             (error) => {
@@ -32,6 +56,7 @@ export default function BucketList(props){
             }
         )
     };
+
     const showNewBucket = () => {
         setNewBucket(!newBucket);
     }
@@ -42,13 +67,22 @@ export default function BucketList(props){
     }
 
     return(
+        isLoaded && 
         <>
             <Container>
                 {!singleBucket ?
                 <>
                     <h5 className="text-left">{props.title}</h5>
                     <NewBucket new={newBucket} showNewBucket={showNewBucket} handleNewBucket={handleNewBucket} title="Create New Bucket"/>
-                    <AllBuckets showSingleBucket={showSingleBucket} bucket={addedBucket} new={newBucket} showNewBucket={showNewBucket} handleNewBucket={handleNewBucket} title="All buckets"/>
+                    <AllBuckets 
+                        showSingleBucket={showSingleBucket} 
+                        bucketsCount={countBuckets} 
+                        bucket={bucketList} 
+                        new={newBucket} 
+                        showNewBucket={showNewBucket} 
+                        handleNewBucket={handleNewBucket} 
+                        title="All buckets"
+                    />
                 </>
                 :   <SingleBucket id={singleBucketId} title={singleBucketName} showSingleBucket={singleBucket}/>
                 }

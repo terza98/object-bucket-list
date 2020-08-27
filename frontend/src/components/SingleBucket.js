@@ -27,6 +27,8 @@ export default function SingleBucket(props){
 
     const fileInput = useRef(null);
 
+    const [fileSelected, selectFile] = useState("");
+
     useEffect(() => {
         // Update files in bucket
         Service.getObjectsList(props.id)
@@ -105,16 +107,32 @@ export default function SingleBucket(props){
         );
         return bytesToSize(total);
     }
+    const handleFileSelect = (id) => {
+        selectFile(id);
+        console.log(id);
+    }
+    const handleFileDelete = () => {
+        Service.deleteFile(props.id, fileSelected)
+        .then(
+            (result) => {
+                console.log(result);
+            },
+            (error) => {
+                setError(error);
+            }
+        )
+    }
 
     return(
         isLoaded && (
         <Container className="innerWrapper">
+            <h6 className="text-left" id="back" onClick={props.showSingleBucket}>← Back</h6>
             <h5 className="text-left">{props.title}</h5>        
             <Row>
                 <Col className="text-right">
                     {key==="files" ?
                         <>
-                            <Button onClick={props.showNewBucket}>Delete Object</Button>  
+                            <Button onClick={handleFileDelete}>Delete Object</Button>  
                             <Button onClick={handleUpload}>Upload Object</Button>
                             <input style={{display: "none"}} ref={fileInput}  type="file" onChange={uploadFile} />
                         </>
@@ -143,7 +161,7 @@ export default function SingleBucket(props){
                             </thead>
                             <tbody>
                                 {filesList.map( (item,index) =>
-                                    <tr key={index} id={item.id}>
+                                    <tr onClick={() => handleFileSelect(item.id)} key={index} id={item.id}>
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
                                         </td>
