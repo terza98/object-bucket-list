@@ -134,12 +134,18 @@ export default function SingleBucket(props){
         Service.deleteFile(props.id, fileSelected)
         .then(
             (result) => {
-                console.log(result);
-            },
-            (error) => {
-                setError(error);
-            }
-        )
+                //update file list 
+                let newFilesList = [...filesList];
+                filesList.map( (item,index) =>
+                    item.name === fileSelected &&
+                        newFilesList.splice(index, 1)
+                );
+                //hide modal
+                setShow(false);
+            })
+            .catch((error) => {
+                setError(error.message);
+            })
     }
 
     const sortFiles = (a, b) => {
@@ -158,9 +164,9 @@ export default function SingleBucket(props){
     
     return(
         isLoaded && (
-        <Container className="innerWrapper">
-            <h6 className="text-left" id="back" onClick={() => props.showSingleBucket(props.id, props.title)}>← Back</h6>
-            <h5 className="text-left">{props.title}</h5>        
+        <Container className="innerWrapper text-left">
+            <h5 className="text-left">{props.title}</h5> 
+            <button className="text-left" id="back" onClick={() => props.showSingleBucket(props.id, props.title)}>← Back</button>       
             <Row>
                 <Col className="text-right">
                     <Modal show={show} onHide={handleClose}>
@@ -198,7 +204,7 @@ export default function SingleBucket(props){
                 <Tab eventKey="files" title="Files">
                     {error&&
                         <Alert variant="danger" onClose={() => setError("")} dismissible>
-                            {error}
+                            {typeof error !== "object"? error: ''}
                         </Alert>
                     }
                     <Row style={{padding: '2%'}}>
@@ -213,7 +219,7 @@ export default function SingleBucket(props){
                             </thead>
                             <tbody>
                                 {filesList.sort(sortFiles).map( (item,index) =>
-                                    <tr onClick={() => handleFileSelect(index)} key={index} id={item.id}>
+                                    <tr onClick={() => handleFileSelect(item.name)} key={index}>
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
                                         </td>
