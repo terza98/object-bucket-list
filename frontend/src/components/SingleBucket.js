@@ -87,6 +87,7 @@ export default function SingleBucket(props){
         .then(
             (result) => {
                 console.log(result);
+                loadFiles([...filesList, result.data]);
             },
             (error) => {
                 setError(error);
@@ -187,7 +188,7 @@ export default function SingleBucket(props){
                             </thead>
                             <tbody>
                                 {filesList.map( (item,index) =>
-                                    <tr onClick={() => handleFileSelect(item.id)} key={index} id={item.id}>
+                                    <tr key={index} id={item.id}>
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
                                         </td>
