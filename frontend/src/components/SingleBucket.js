@@ -32,9 +32,13 @@ export default function SingleBucket(props){
 
     //modal popup 
     const [show, setShow] = useState(false);
+    const [isBucket, setIsBucket] = useState("");
     
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = (prop) => {
+        prop==="object"? setIsBucket("object"): setIsBucket("bucket")
+        setShow(true);
+    }
 
     useEffect(() => {
         // Update files in bucket
@@ -118,6 +122,7 @@ export default function SingleBucket(props){
         selectFile(id);
         console.log(id);
     }
+
     const handleFileDelete = () => {
         Service.deleteFile(props.id, fileSelected)
         .then(
@@ -137,29 +142,29 @@ export default function SingleBucket(props){
             <h5 className="text-left">{props.title}</h5>        
             <Row>
                 <Col className="text-right">
+                    <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Are you sure?</Modal.Title>
+                        </Modal.Header>
+                            <Modal.Body>Do you really want to delete this {isBucket}?</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={isBucket==="object"? handleFileDelete: deleteBucket}>
+                                Delete
+                            </Button>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Cancel
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                     {key==="files" ?
                         <>
-                            <Modal show={show} onHide={handleClose}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Are you sure?</Modal.Title>
-                                </Modal.Header>
-                                    <Modal.Body>Do you really want to delete this object?</Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="primary" onClick={handleFileDelete}>
-                                        Delete
-                                    </Button>
-                                    <Button variant="secondary" onClick={handleClose}>
-                                        Cancel
-                                    </Button>
-                                </Modal.Footer>
-                            </Modal>
-                            <Button onClick={handleShow}>Delete Object</Button>  
+                            <Button onClick={() => handleShow("object")}>Delete Object</Button>  
                             <Button onClick={handleUpload}>Upload Object</Button>
                             <input style={{display: "none"}} ref={fileInput}  type="file" onChange={uploadFile} />
                         </>
                     :
                         <>
-                            <Button onClick={deleteBucket}>Delete Bucket</Button>  
+                            <Button onClick={() => handleShow("bucket")}>Delete Bucket</Button>  
                         </>
                     } 
                 </Col>
@@ -200,7 +205,7 @@ export default function SingleBucket(props){
                 </Tab>
                 <Tab eventKey="details" title="Bucket details">
                     {details!=="" && details!==null &&
-                    <div className="text-left">
+                    <div className="text-left" style={{padding: '2% 4%'}}>
                         <p>Bucket Name: {details.name}</p>
                         <p>Location: {details.location.name}</p>
                         <p>Storage Size: {totalSize()}</p>
