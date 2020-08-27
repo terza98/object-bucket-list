@@ -50,12 +50,11 @@ export default function SingleBucket(props){
                     setLoad(true);
                     updateFilesCount(result.data.objects.length);
                     loadFiles(result.data.objects);
-                },
-                // Note: hanling errors here
-                (error) => {
-                    setError(error);
-                }
-            )
+                })
+            .catch((error) => {
+                setError(error);
+                console.log(error);
+            })
         //get bucket details
         Service.getSingleBucket(props.id)
             .then(
@@ -75,11 +74,12 @@ export default function SingleBucket(props){
             .then(
                 (result) => {
                     console.log(result);
-                },
-                (error) => {
-                    setError(error);
-                }
-            )
+                    props.removeSingleBucket(props.id);
+                })
+            .catch((error) => {
+                setError(error);
+                console.log(error);
+            })
     }
 
     const uploadFile = (e) => {

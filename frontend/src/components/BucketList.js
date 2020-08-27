@@ -65,6 +65,17 @@ export default function BucketList(props){
         setSingleBucketName(name);
         setSingleBucketId(id);
     }
+    const removeSingleBucket = (id) => { 
+        //when bucket is deleted update bucket list
+        setSingleBucket(!singleBucket);
+        let newBucketList = [...bucketList];
+        bucketList.map((item,index)=>
+            item.id===id && newBucketList.splice(index, 1)
+        )
+        console.log(newBucketList);
+        loadBucketList(newBucketList);
+        updateBucketsCount(countBuckets-1);
+    }
 
     return(
         isLoaded && 
@@ -84,7 +95,12 @@ export default function BucketList(props){
                         title="All buckets"
                     />
                 </>
-                :   <SingleBucket id={singleBucketId} title={singleBucketName} showSingleBucket={showSingleBucket}/>
+                :   <SingleBucket 
+                        id={singleBucketId} 
+                        title={singleBucketName} 
+                        removeSingleBucket={removeSingleBucket}
+                        showSingleBucket={showSingleBucket}
+                    />
                 }
             </Container>
         </>
