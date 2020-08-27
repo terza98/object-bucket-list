@@ -74,3 +74,31 @@ thead{
 }
 .bucket-name{padding:10px;}
 #back{cursor: pointer;}
+#deleteObject{
+  background-color: #f3c0c0 !important;
+  color: #481820 !important;
+  border: 1px solid #481820;
+}
+#uploadObject{
+  color: #3b3f4c !important;
+  border: 1px solid #3b3f4c;
+  background-color: #fff !important;
+}
+#deleteBucket{
+  background-color: #cf1f1d !important;
+  color: #e9a8a6 !important;
+  border: 1px solid #3b0808;
+  box-shadow: 3px 3px 1px 1px #3b0808;
+}
+.nav.nav-tabs a{
+  color: #503e43;
+}
+.nav.nav-tabs a[aria-selected="false"]{
+  background-color: #d9a6a6;
+  color: #988f8f;
+}
+.modal-btn{
+  background-color: #f3c0c0 !important;
+  color: #330000 !important;
+  box-shadow: 3px 3px 1px 1px #330000;
+}

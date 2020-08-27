@@ -150,23 +150,23 @@ export default function SingleBucket(props){
                         </Modal.Header>
                             <Modal.Body>Do you really want to delete this {isBucket}?</Modal.Body>
                         <Modal.Footer>
-                            <Button variant="primary" onClick={isBucket==="object"? handleFileDelete: deleteBucket}>
+                            <Button className="modal-btn" variant="primary" onClick={isBucket==="object"? handleFileDelete: deleteBucket}>
                                 Delete
                             </Button>
-                            <Button variant="secondary" onClick={handleClose}>
+                            <Button className="modal-btn" variant="secondary" onClick={handleClose}>
                                 Cancel
                             </Button>
                         </Modal.Footer>
                     </Modal>
                     {key==="files" ?
                         <>
-                            <Button onClick={() => handleShow("object")}>Delete Object</Button>  
-                            <Button onClick={handleUpload}>Upload Object</Button>
+                            <Button id="deleteObject" onClick={() => handleShow("object")}>Delete Object</Button>  
+                            <Button id="uploadObject" onClick={handleUpload}>Upload Object</Button>
                             <input style={{display: "none"}} ref={fileInput}  type="file" onChange={uploadFile} />
                         </>
                     :
                         <>
-                            <Button onClick={() => handleShow("bucket")}>Delete Bucket</Button>  
+                            <Button id="deleteBucket" onClick={() => handleShow("bucket")}>Delete Bucket</Button>  
                         </>
                     } 
                 </Col>
@@ -194,7 +194,7 @@ export default function SingleBucket(props){
                             </thead>
                             <tbody>
                                 {filesList.map( (item,index) =>
-                                    <tr key={index} id={item.id}>
+                                    <tr onClick={() => handleFileSelect(index)} key={index} id={item.id}>
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
                                         </td>
@@ -210,7 +210,7 @@ export default function SingleBucket(props){
                         </Table>
                     </Row>
                 </Tab>
-                <Tab eventKey="details" title="Bucket details">
+                <Tab eventKey="details" title="Details">
                     {details!=="" && details!==null &&
                     <div className="text-left" style={{padding: '2% 4%'}}>
                         <p>Bucket Name: {details.name}</p>
