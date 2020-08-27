@@ -84,7 +84,7 @@ export default function BucketList(props){
                         title="All buckets"
                     />
                 </>
-                :   <SingleBucket id={singleBucketId} title={singleBucketName} showSingleBucket={singleBucket}/>
+                :   <SingleBucket id={singleBucketId} title={singleBucketName} showSingleBucket={showSingleBucket}/>
                 }
             </Container>
         </>

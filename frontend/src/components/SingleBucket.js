@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Modal from 'react-bootstrap/Modal';
 
 //API import
 import Service from '../api/auth-service.js'
@@ -28,6 +29,12 @@ export default function SingleBucket(props){
     const fileInput = useRef(null);
 
     const [fileSelected, selectFile] = useState("");
+
+    //modal popup 
+    const [show, setShow] = useState(false);
+    
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     useEffect(() => {
         // Update files in bucket
@@ -58,7 +65,7 @@ export default function SingleBucket(props){
                 }
             )
     }, [] );
-
+        
     const deleteBucket = () => {
         Service.deleteBucket(props.id)
             .then(
@@ -126,13 +133,27 @@ export default function SingleBucket(props){
     return(
         isLoaded && (
         <Container className="innerWrapper">
-            <h6 className="text-left" id="back" onClick={props.showSingleBucket}>← Back</h6>
+            <h6 className="text-left" id="back" onClick={() => props.showSingleBucket(props.id, props.title)}>← Back</h6>
             <h5 className="text-left">{props.title}</h5>        
             <Row>
                 <Col className="text-right">
                     {key==="files" ?
                         <>
-                            <Button onClick={handleFileDelete}>Delete Object</Button>  
+                            <Modal show={show} onHide={handleClose}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Are you sure?</Modal.Title>
+                                </Modal.Header>
+                                    <Modal.Body>Do you really want to delete this object?</Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="primary" onClick={handleFileDelete}>
+                                        Delete
+                                    </Button>
+                                    <Button variant="secondary" onClick={handleClose}>
+                                        Cancel
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            <Button onClick={handleShow}>Delete Object</Button>  
                             <Button onClick={handleUpload}>Upload Object</Button>
                             <input style={{display: "none"}} ref={fileInput}  type="file" onChange={uploadFile} />
                         </>
