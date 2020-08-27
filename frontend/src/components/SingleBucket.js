@@ -178,7 +178,7 @@ export default function SingleBucket(props){
             >
                 <Tab eventKey="files" title="Files">
                     {error&&
-                        <Alert variant="danger">
+                        <Alert variant="danger" onClose={() => setError("")} dismissible>
                             {error}
                         </Alert>
                     }
