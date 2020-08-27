@@ -7,6 +7,7 @@ import Table from 'react-bootstrap/Table';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
 
 //API import
 import Service from '../api/auth-service.js'
@@ -62,12 +63,11 @@ export default function SingleBucket(props){
                     console.log(result.data.bucket);
                     setLoad(true);
                     setDetails(result.data.bucket);
-                },
-                // Note: hanling errors here
-                (error) => {
-                    setError(error);
-                }
-            )
+                })
+            .catch((error) => {
+                setError(error);
+                console.log(error);
+            })
     }, [] );
         
     const deleteBucket = () => {
@@ -88,11 +88,12 @@ export default function SingleBucket(props){
             (result) => {
                 console.log(result);
                 loadFiles([...filesList, result.data]);
-            },
-            (error) => {
-                setError(error);
-            }
-        )
+                setError(null);
+            })
+        .catch((error) => {
+            setError(error.message);
+            console.log(error.message);
+        })
     }
     const handleUpload = () => {
         fileInput.current.click();
@@ -176,6 +177,11 @@ export default function SingleBucket(props){
             onSelect={(k) => setKey(k)}
             >
                 <Tab eventKey="files" title="Files">
+                    {error&&
+                        <Alert variant="danger">
+                            {error}
+                        </Alert>
+                    }
                     <Row style={{padding: '2%'}}>
                         <p>All files ({countFiles})</p>
                         <Table hover>
