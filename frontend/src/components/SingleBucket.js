@@ -125,7 +125,6 @@ export default function SingleBucket(props){
     }
     const handleFileSelect = (id) => {
         selectFile(id);
-        console.log(id);
     }
 
     const handleFileDelete = () => {
@@ -184,7 +183,9 @@ export default function SingleBucket(props){
                     </Modal>
                     {key==="files" ?
                         <>
-                            <Button id="deleteObject" onClick={() => handleShow("object")}>Delete Object</Button>  
+                            {fileSelected!=="" &&
+                                <Button id="deleteObject" onClick={() => handleShow("object")}>Delete Object</Button>  
+                            }
                             <Button id="uploadObject" onClick={handleUpload}>Upload Object</Button>
                             <input style={{display: "none"}} ref={fileInput}  type="file" onChange={uploadFile} />
                         </>
