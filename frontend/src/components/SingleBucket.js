@@ -140,6 +140,7 @@ export default function SingleBucket(props){
                     item.name === fileSelected &&
                         newFilesList.splice(index, 1)
                 );
+                loadFiles(newFilesList);
                 //hide modal
                 setShow(false);
             })
