@@ -25,8 +25,6 @@ export default function SingleBucket(props){
     //details
     const [details, setDetails] = useState("");
 
-    const [formData, setFormData] = useState(null);
-
     const fileInput = useRef(null);
 
     const [fileSelected, selectFile] = useState("");
@@ -220,7 +218,7 @@ export default function SingleBucket(props){
                             </thead>
                             <tbody>
                                 {filesList.sort(sortFiles).map( (item,index) =>
-                                    <tr onClick={() => handleFileSelect(item.name)} key={index}>
+                                    <tr className={fileSelected === item.name? "selectedObject": null} onClick={() => handleFileSelect(item.name)} key={index}>
                                         <td>
                                             <span className="bucket-name">{item.name}</span>
                                         </td>

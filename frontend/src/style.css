@@ -110,5 +110,5 @@ thead{
 #back{background: #f3c0c0;}
 #back:hover{background: transparent;}
 .selectedObject{
-  background-color: #cf1f1d !important;
+  background-color: #f3c0c0 !important;
 }
