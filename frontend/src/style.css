@@ -1,3 +1,7 @@
+body {
+  background-color: #eff2f4 !important;
+}
+
 .App {
     text-align: center;
   }
@@ -45,7 +49,6 @@
 #wrapper{
     height: 100vh; 
     padding-top: 1%;
-    background-color: #eff2f4;
 }
 .innerWrapper{
     background-color: #fff;
