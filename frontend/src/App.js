@@ -8,14 +8,14 @@ import Header from './components/Header.js';
 import BucketList from './components/BucketList.js';
 
 function App() {
-  return (
-    <div className="App">
-      <Header title="Secure cloud storage"/>
-      <Container fluid id="wrapper">
-        <BucketList title="Bucket list"/>
-      </Container>
-    </div>
-  );
+	return (
+		<div className="App">
+			<Header title="Secure cloud storage" />
+			<Container fluid id="wrapper">
+				<BucketList title="Bucket list" />
+			</Container>
+		</div>
+	);
 }
 
 export default App;
