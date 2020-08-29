@@ -17,7 +17,7 @@ const fileConfig = {
 };
 
 // TODO rename to ApiClient and accept api url as an argument
-class Service {
+class ApiClient {
 	getBucketLocation() {
 		return axios.get(API_URL + 'locations', config);
 	}
@@ -53,4 +53,4 @@ class Service {
 		);
 	}
 }
-export default new Service();
+export default new ApiClient();

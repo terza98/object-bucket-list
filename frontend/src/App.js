@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+// https://react-bootstrap.github.io/getting-started/introduction#importing-components
 import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert';
 
 //components
 import Header from './components/Header.js';
@@ -10,7 +13,7 @@ import AllBuckets from './components/AllBuckets.js';
 import SingleBucket from './components/SingleBucket.js';
 
 //API
-import Service from './api/auth-service.js';
+import ApiClient from './api/auth-service.js';
 
 function App() {
 	const [showNewBucketForm, setShowNewBucketForm] = useState(false);
@@ -25,20 +28,18 @@ function App() {
 	// General state
 	const [loaded, setLoaded] = useState(false);
 	const [error, setError] = useState('');
+	const [success, setSuccess] = useState('');
 
-	//
 	const [bucketList, loadBucketList] = useState(['']);
-	const bucketCount = bucketList.length;
 
 	useEffect(() => {
 		// Load/update the buckets
-		Service.getBucketList()
+		ApiClient.getBucketList()
 			.then(result => {
-				console.log(result.data);
 				loadBucketList(result.data.buckets);
 			})
 			.catch(error => {
-				setError(error);
+				setError(error.message);
 			})
 			.finally(() => {
 				setLoaded(true);
@@ -46,18 +47,21 @@ function App() {
 	}, []);
 
 	const handleNewBucket = (name, location) => {
-		Service.createBucket(name, location).then(
-			result => {
-				console.log(result.data.bucket);
+		ApiClient.createBucket(name, location)
+			.then(result => {
 				setShowNewBucketForm(!showNewBucketForm);
-
 				loadBucketList([...bucketList, result.data.bucket]);
-			},
-			// Note: handling errors here
-			error => {
-				setError(error);
-			},
-		);
+				setSuccess('Successfully added new bucket.');
+			})
+			.catch(error => {
+				if (error.response) {
+					error.response.status === 400
+						? setError('Request is badly formatted.')
+						: error.response.status === 409
+						? setError('Entity with this name already exists.')
+						: setError(error.message);
+				}
+			});
 	};
 
 	const showNewBucket = () => {
@@ -75,8 +79,8 @@ function App() {
 		bucketList.map(
 			(item, index) => item.id === id && newBucketList.splice(index, 1),
 		);
-		console.log(newBucketList);
 		loadBucketList(newBucketList);
+		setSuccess('Bucket has been deleted successfully.');
 	};
 
 	function render() {
@@ -89,8 +93,8 @@ function App() {
 				<SingleBucket
 					id={singleBucketId}
 					title={singleBucketName}
-					removeSingleBucket={removeSingleBucket}
-					showSingleBucket={displayBucket}
+					onRemove={removeSingleBucket}
+					onBack={() => setShowSingleBucket(false)}
 				/>
 			);
 		}
@@ -98,17 +102,11 @@ function App() {
 		return (
 			<>
 				<h5 className="text-left">Bucket List</h5>
-				<NewBucket
-					new={showNewBucketForm}
-					showNewBucket={showNewBucket}
-					handleNewBucket={handleNewBucket}
-					title="Create New Bucket"
-				/>
+				{showNewBucketForm && <NewBucket onSubmit={handleNewBucket} />}
 				<AllBuckets
 					showSingleBucket={displayBucket}
-					bucketsCount={bucketCount}
-					bucket={bucketList}
-					new={showNewBucketForm}
+					buckets={bucketList}
+					showNew={showNewBucketForm}
 					showNewBucket={showNewBucket}
 					handleNewBucket={handleNewBucket}
 					title="All buckets"
@@ -120,7 +118,27 @@ function App() {
 	return (
 		<div className="App">
 			<Header title="Secure cloud storage" />
-			<Container id="wrapper">{render()}</Container>
+			<Container id="wrapper">
+				{error && (
+					<Alert
+						variant="danger"
+						onClose={() => setError('')}
+						dismissible
+					>
+						{typeof error !== 'object' ? error : ''}
+					</Alert>
+				)}
+				{success && (
+					<Alert
+						variant="success"
+						onClose={() => setSuccess('')}
+						dismissible
+					>
+						{typeof success !== 'object' ? success : ''}
+					</Alert>
+				)}
+				{render()}
+			</Container>
 		</div>
 	);
 }
