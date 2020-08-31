@@ -48,7 +48,12 @@ export default function NewBucket(props) {
 						{typeof error !== 'object' ? error : ''}
 					</Alert>
 				)}
-				<Form>
+				<Form
+					onSubmit={e => {
+						e.preventDefault();
+						props.onSubmit(name, location);
+					}}
+				>
 					<Row>
 						<Col className="text-left">
 							<Form.Label className="required">
@@ -81,7 +86,7 @@ export default function NewBucket(props) {
 					<Row className="text-left">
 						<Button
 							style={{ margin: '15px' }}
-							onClick={() => props.onSubmit(name, location)}
+							type="submit"
 							data-testid="button"
 						>
 							Create Bucket
