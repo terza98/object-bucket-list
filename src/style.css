@@ -61,6 +61,7 @@ code {
 #wrapper{
     height: 100vh; 
     padding-top: 1%;
+    text-align: left;
 }
 .innerWrapper{
     background-color: #fff;
@@ -89,12 +90,12 @@ thead{
 }
 .bucket-name{padding:10px;}
 #back{cursor: pointer;}
-#deleteObject{
+#deleteObject:hover, #uploadObject:hover{
   background-color: #f3c0c0 !important;
   color: #481820 !important;
   border: 1px solid #481820;
 }
-#uploadObject{
+#uploadObject, #deleteObject{
   color: #3b3f4c !important;
   border: 1px solid #3b3f4c;
   background-color: #fff !important;
@@ -110,7 +111,7 @@ thead{
 }
 .nav.nav-tabs a[aria-selected="false"]{
   background-color: #d9a6a6;
-  color: #988f8f;
+  color: #6b6565;
 }
 .nav.nav-tabs a[aria-selected="false"]:hover{
   background-color: transparent;
