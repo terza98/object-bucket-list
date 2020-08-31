@@ -19,7 +19,6 @@ import ApiClient from './api/auth-service.js';
 
 function App() {
 	const [showNewBucketForm, setShowNewBucketForm] = useState(false);
-	const [showSingleBucket, setShowSingleBucket] = useState(false);
 
 	// General state
 	const [loaded, setLoaded] = useState(false);
@@ -66,7 +65,7 @@ function App() {
 
 	const removeSingleBucket = id => {
 		//when bucket is deleted update bucket list
-		setShowSingleBucket(!showSingleBucket);
+		history.push('/');
 		let newBucketList = [...bucketList];
 		bucketList.map(
 			(item, index) => item.id === id && newBucketList.splice(index, 1),
