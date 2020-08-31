@@ -106,7 +106,7 @@ function App() {
 							path="/"
 							render={() => (
 								<>
-									<h5 className="text-left">Bucket List</h5>
+									<h3 className="text-left">Bucket List</h3>
 									{showNewBucketForm && (
 										<NewBucket onSubmit={handleNewBucket} />
 									)}
