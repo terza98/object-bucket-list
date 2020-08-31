@@ -13,9 +13,12 @@ import ApiClient from '../api/auth-service.js';
 
 export default function NewBucket(props) {
 	const [bucketLocations, loadBucketLocation] = useState(['']);
-	const [error, setError] = useState('');
 	const [name, setName] = useState('');
 	const [location, setLocation] = useState('');
+
+	//general state
+	const [loaded, setLoaded] = useState(false);
+	const [error, setError] = useState('');
 
 	useEffect(() => {
 		// Update the bucket location
@@ -25,7 +28,8 @@ export default function NewBucket(props) {
 			})
 			.catch(error => {
 				setError(error.message);
-			});
+			})
+			.finally(() => setLoaded(true));
 	}, []);
 
 	function handleNameChange(e) {
@@ -35,6 +39,9 @@ export default function NewBucket(props) {
 		setLocation(e.target.value);
 	}
 
+	if (!loaded) {
+		return <img src={require('../loading.gif')} alt="loading..." />;
+	}
 	return (
 		<>
 			<p className="text-left">Create New Bucket</p>
@@ -77,11 +84,12 @@ export default function NewBucket(props) {
 								as="select"
 							>
 								<option value="0">Choose...</option>
-								{bucketLocations.map((item, index) => (
-									<option key={index} value={item.id}>
-										{item.name}
-									</option>
-								))}
+								{bucketLocations !== null &&
+									bucketLocations.map((item, index) => (
+										<option key={index} value={item.id}>
+											{item.name}
+										</option>
+									))}
 							</Form.Control>
 						</Col>
 					</Row>
