@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 // https://react-bootstrap.github.io/getting-started/introduction#importing-components
 import Row from 'react-bootstrap/Row';
@@ -9,10 +9,15 @@ import Table from 'react-bootstrap/Table';
 
 export default function AllBuckets(props) {
 	const [loaded, setLoaded] = useState(false);
+	const row = useRef(null);
 
 	useEffect(() => {
 		setLoaded(true);
 	}, []);
+
+	const handleRowClick = () => {
+		row.current.click();
+	};
 
 	if (!loaded) {
 		return <img src={require('../loading.gif')} alt="loading..." />;
@@ -49,10 +54,12 @@ export default function AllBuckets(props) {
 									style={{ cursor: 'pointer' }}
 									key={index}
 									id={item.id}
+									onClick={handleRowClick}
 								>
 									<td>
 										<Link
 											to={`/bucket/${item.name}/${item.id}`}
+											ref={row}
 										>
 											<span className="bucket-name">
 												{item.name}
@@ -63,6 +70,7 @@ export default function AllBuckets(props) {
 										<td>
 											<Link
 												to={`/bucket/${item.name}/${item.id}`}
+												ref={row}
 											>
 												{item.location.name}
 											</Link>
