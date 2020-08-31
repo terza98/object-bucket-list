@@ -57,7 +57,7 @@ exports[`matches snapshot 1`] = `
           class="btn btn-primary"
           data-testid="button"
           style="margin: 15px;"
-          type="button"
+          type="submit"
         >
           Create Bucket
         </button>
