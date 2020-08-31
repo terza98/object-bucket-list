@@ -82,6 +82,7 @@ export default function NewBucket(props) {
 						<Button
 							style={{ margin: '15px' }}
 							onClick={() => props.onSubmit(name, location)}
+							data-testid="button"
 						>
 							Create Bucket
 						</Button>
