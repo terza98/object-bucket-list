@@ -128,7 +128,7 @@ export default function SingleBucket(props) {
 		return bytesToSize(total);
 	};
 	const handleFileSelect = id => {
-		selectFile(id);
+		fileSelected === '' ? selectFile(id) : selectFile('');
 	};
 
 	const handleFileDelete = () => {
@@ -176,152 +176,163 @@ export default function SingleBucket(props) {
 	}
 
 	return (
-		<Container className="innerWrapper text-left">
-			<h5 className="text-left">{title}</h5>
+		<>
+			<h3 className="text-left">{title}</h3>
 			<button className="text-left" id="back" onClick={props.onBack}>
 				← Back
 			</button>
-			<Row>
-				<Col className="text-right">
-					<Modal show={show} onHide={handleClose}>
-						<Modal.Header closeButton>
-							<Modal.Title>Are you sure?</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>
-							Do you really want to delete this {isBucket}?
-						</Modal.Body>
-						<Modal.Footer>
-							<Button
-								className="modal-btn"
-								variant="primary"
-								onClick={
-									isBucket === 'object'
-										? handleFileDelete
-										: deleteBucket
-								}
-							>
-								Delete
-							</Button>
-							<Button
-								className="modal-btn"
-								variant="secondary"
-								onClick={handleClose}
-							>
-								Cancel
-							</Button>
-						</Modal.Footer>
-					</Modal>
-					{key === 'files' ? (
-						<>
-							{fileSelected !== '' && (
+			<Container className="innerWrapper text-left">
+				<Row>
+					<Col className="text-right">
+						<Modal show={show} onHide={handleClose}>
+							<Modal.Header closeButton>
+								<Modal.Title>Are you sure?</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								Do you really want to delete this {isBucket}?
+							</Modal.Body>
+							<Modal.Footer>
 								<Button
-									id="deleteObject"
-									onClick={() => handleShow('object')}
+									className="modal-btn"
+									variant="primary"
+									onClick={
+										isBucket === 'object'
+											? handleFileDelete
+											: deleteBucket
+									}
 								>
-									Delete Object
+									Delete
 								</Button>
-							)}
-							<Button id="uploadObject" onClick={handleUpload}>
-								Upload Object
-							</Button>
-							<input
-								style={{ display: 'none' }}
-								ref={fileInput}
-								type="file"
-								onChange={uploadFile}
-							/>
-						</>
-					) : (
-						<>
-							<Button
-								id="deleteBucket"
-								onClick={() => handleShow('bucket')}
+								<Button
+									className="modal-btn"
+									variant="secondary"
+									onClick={handleClose}
+								>
+									Cancel
+								</Button>
+							</Modal.Footer>
+						</Modal>
+						{key === 'files' ? (
+							<>
+								{fileSelected !== '' && (
+									<Button
+										id="deleteObject"
+										onClick={() => handleShow('object')}
+									>
+										Delete Object
+									</Button>
+								)}
+								<Button
+									id="uploadObject"
+									onClick={handleUpload}
+								>
+									Upload Object
+								</Button>
+								<input
+									style={{ display: 'none' }}
+									ref={fileInput}
+									type="file"
+									onChange={uploadFile}
+								/>
+							</>
+						) : (
+							<>
+								<Button
+									id="deleteBucket"
+									onClick={() => handleShow('bucket')}
+								>
+									Delete Bucket
+								</Button>
+							</>
+						)}
+					</Col>
+				</Row>
+				<Tabs
+					id="controlled-tab-example"
+					activeKey={key}
+					onSelect={k => setKey(k)}
+				>
+					<Tab eventKey="files" title="Files">
+						{error && (
+							<Alert
+								variant="danger"
+								onClose={() => setError('')}
+								dismissible
 							>
-								Delete Bucket
-							</Button>
-						</>
-					)}
-				</Col>
-			</Row>
-			<Tabs
-				id="controlled-tab-example"
-				activeKey={key}
-				onSelect={k => setKey(k)}
-			>
-				<Tab eventKey="files" title="Files">
-					{error && (
-						<Alert
-							variant="danger"
-							onClose={() => setError('')}
-							dismissible
-						>
-							{typeof error !== 'object' ? error : ''}
-						</Alert>
-					)}
-					{success && (
-						<Alert
-							variant="success"
-							onClose={() => setSuccess('')}
-							dismissible
-						>
-							{typeof success !== 'object' ? success : ''}
-						</Alert>
-					)}
-					<Row style={{ padding: '2%' }}>
-						<p>All files ({filesList.length})</p>
-						<Table hover>
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Last modified</th>
-									<th>Size</th>
-								</tr>
-							</thead>
-							<tbody>
-								{filesList
-									.sort(sortFiles)
-									.map((item, index) => (
-										<tr
-											className={
-												fileSelected === item.name
-													? 'selectedObject'
-													: null
-											}
-											onClick={() =>
-												handleFileSelect(item.name)
-											}
-											key={index}
-										>
-											<td>
-												<span className="bucket-name">
-													{item.name}
-												</span>
-											</td>
-											{item.last_modified !==
-												undefined && (
+								{typeof error !== 'object' ? error : ''}
+							</Alert>
+						)}
+						{success && (
+							<Alert
+								variant="success"
+								onClose={() => setSuccess('')}
+								dismissible
+							>
+								{typeof success !== 'object' ? success : ''}
+							</Alert>
+						)}
+						<Row style={{ padding: '2%' }}>
+							<p>All files ({filesList.length})</p>
+							<Table hover>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Last modified</th>
+										<th>Size</th>
+									</tr>
+								</thead>
+								<tbody>
+									{filesList
+										.sort(sortFiles)
+										.map((item, index) => (
+											<tr
+												className={
+													fileSelected === item.name
+														? 'selectedObject'
+														: null
+												}
+												onClick={() =>
+													handleFileSelect(item.name)
+												}
+												style={{ cursor: 'pointer' }}
+												key={index}
+											>
 												<td>
-													{formatDate(
-														item.last_modified,
-													)}
+													<span className="bucket-name">
+														{item.name}
+													</span>
 												</td>
-											)}
-											<td>{bytesToSize(item.size)}</td>
-										</tr>
-									))}
-							</tbody>
-						</Table>
-					</Row>
-				</Tab>
-				<Tab eventKey="details" title="Details">
-					{details !== '' && details !== null && (
-						<div className="text-left" style={{ padding: '2% 4%' }}>
-							<p>Bucket Name: {details.name}</p>
-							<p>Location: {details.location.name}</p>
-							<p>Storage Size: {totalSize()}</p>
-						</div>
-					)}
-				</Tab>
-			</Tabs>
-		</Container>
+												{item.last_modified !==
+													undefined && (
+													<td>
+														{formatDate(
+															item.last_modified,
+														)}
+													</td>
+												)}
+												<td>
+													{bytesToSize(item.size)}
+												</td>
+											</tr>
+										))}
+								</tbody>
+							</Table>
+						</Row>
+					</Tab>
+					<Tab eventKey="details" title="Details">
+						{details !== '' && details !== null && (
+							<div
+								className="text-left"
+								style={{ padding: '2% 4%' }}
+							>
+								<p>Bucket Name: {details.name}</p>
+								<p>Location: {details.location.name}</p>
+								<p>Storage Size: {totalSize()}</p>
+							</div>
+						)}
+					</Tab>
+				</Tabs>
+			</Container>
+		</>
 	);
 }
