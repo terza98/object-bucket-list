@@ -1,6 +1,18 @@
 body {
   background-color: #eff2f4 !important;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
 
 .App {
     text-align: center;
@@ -114,4 +126,11 @@ thead{
 #back:hover{background: transparent;}
 .selectedObject{
   background-color: #f3c0c0 !important;
+}
+#all-buckets a {
+  color: #212529 !important;
+}
+#all-buckets a:hover{
+  color: #212529 !important;
+  text-decoration: none !important;
 }

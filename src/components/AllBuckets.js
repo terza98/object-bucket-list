@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 // https://react-bootstrap.github.io/getting-started/introduction#importing-components
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -34,7 +35,7 @@ export default function AllBuckets(props) {
 				</Col>
 			</Row>
 			<Row style={{ padding: '2%' }}>
-				<Table hover>
+				<Table id="all-buckets" hover>
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -45,22 +46,27 @@ export default function AllBuckets(props) {
 						{props.buckets !== undefined &&
 							props.buckets.map((item, index) => (
 								<tr
-									onClick={() =>
-										props.showSingleBucket(
-											item.name,
-											item.id,
-										)
-									}
+									style={{ cursor: 'pointer' }}
 									key={index}
 									id={item.id}
 								>
 									<td>
-										<span className="bucket-name">
-											{item.name}
-										</span>
+										<Link
+											to={`/bucket/${item.name}/${item.id}`}
+										>
+											<span className="bucket-name">
+												{item.name}
+											</span>
+										</Link>
 									</td>
 									{item.location !== undefined && (
-										<td>{item.location.name}</td>
+										<td>
+											<Link
+												to={`/bucket/${item.name}/${item.id}`}
+											>
+												{item.location.name}
+											</Link>
+										</td>
 									)}
 								</tr>
 							))}

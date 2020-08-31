@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Router, Switch, Route } from 'react-router-dom';
+import history from './history';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -19,12 +21,6 @@ function App() {
 	const [showNewBucketForm, setShowNewBucketForm] = useState(false);
 	const [showSingleBucket, setShowSingleBucket] = useState(false);
 
-	// Single Bucket Form
-	const [singleBucketName, setSingleBucketName] = useState('');
-
-	// Single
-	const [singleBucketId, setSingleBucketId] = useState('');
-
 	// General state
 	const [loaded, setLoaded] = useState(false);
 	const [error, setError] = useState('');
@@ -41,9 +37,7 @@ function App() {
 			.catch(error => {
 				setError(error.message);
 			})
-			.finally(() => {
-				setLoaded(true);
-			});
+			.finally(() => {});
 	}, []);
 
 	const handleNewBucket = (name, location) => {
@@ -67,11 +61,7 @@ function App() {
 	const showNewBucket = () => {
 		setShowNewBucketForm(!showNewBucketForm);
 	};
-	const displayBucket = (name, id) => {
-		setShowSingleBucket(!showSingleBucket);
-		setSingleBucketName(name);
-		setSingleBucketId(id);
-	};
+
 	const removeSingleBucket = id => {
 		//when bucket is deleted update bucket list
 		setShowSingleBucket(!showSingleBucket);
@@ -83,62 +73,66 @@ function App() {
 		setSuccess('Bucket has been deleted successfully.');
 	};
 
-	function render() {
-		if (!loaded) {
-			return <h1>Loading...</h1>;
-		}
-
-		if (showSingleBucket) {
-			return (
-				<SingleBucket
-					id={singleBucketId}
-					title={singleBucketName}
-					onRemove={removeSingleBucket}
-					onBack={() => setShowSingleBucket(false)}
-				/>
-			);
-		}
-
-		return (
-			<>
-				<h5 className="text-left">Bucket List</h5>
-				{showNewBucketForm && <NewBucket onSubmit={handleNewBucket} />}
-				<AllBuckets
-					showSingleBucket={displayBucket}
-					buckets={bucketList}
-					showNew={showNewBucketForm}
-					showNewBucket={showNewBucket}
-					handleNewBucket={handleNewBucket}
-					title="All buckets"
-				/>
-			</>
-		);
+	if (!loaded) {
+		return <img src={require('./loading.webp')} alt="loading..." />;
 	}
-
 	return (
 		<div className="App">
-			<Header title="Secure cloud storage" />
-			<Container id="wrapper">
-				{error && (
-					<Alert
-						variant="danger"
-						onClose={() => setError('')}
-						dismissible
-					>
-						{typeof error !== 'object' ? error : ''}
-					</Alert>
-				)}
-				{success && (
-					<Alert
-						variant="success"
-						onClose={() => setSuccess('')}
-						dismissible
-					>
-						{typeof success !== 'object' ? success : ''}
-					</Alert>
-				)}
-				{render()}
-			</Container>
+			<Router history={history}>
+				<Header title="Secure cloud storage" />
+				<Container id="wrapper">
+					{error && (
+						<Alert
+							variant="danger"
+							onClose={() => setError('')}
+							dismissible
+						>
+							{typeof error !== 'object' ? error : ''}
+						</Alert>
+					)}
+					{success && (
+						<Alert
+							variant="success"
+							onClose={() => setSuccess('')}
+							dismissible
+						>
+							{typeof success !== 'object' ? success : ''}
+						</Alert>
+					)}
+					<Switch>
+						<Route
+							exact
+							path="/"
+							render={() => (
+								<>
+									<h5 className="text-left">Bucket List</h5>
+									{showNewBucketForm && (
+										<NewBucket onSubmit={handleNewBucket} />
+									)}
+									<AllBuckets
+										buckets={bucketList}
+										showNew={showNewBucketForm}
+										showNewBucket={showNewBucket}
+										handleNewBucket={handleNewBucket}
+										title="All buckets"
+									/>
+								</>
+							)}
+						/>
+						<Route
+							path="/bucket/:title/:id"
+							component={() => (
+								<SingleBucket
+									onRemove={removeSingleBucket}
+									onBack={() => {
+										history.push('/');
+									}}
+								/>
+							)}
+						/>
+					</Switch>
+				</Container>
+			</Router>
 		</div>
 	);
 }

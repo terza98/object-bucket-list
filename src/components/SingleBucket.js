@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 
 // https://react-bootstrap.github.io/getting-started/introduction#importing-components
 import Row from 'react-bootstrap/Row';
@@ -16,6 +17,8 @@ import ApiClient from '../api/auth-service.js';
 
 export default function SingleBucket(props) {
 	//files
+	const { id } = useParams();
+	const { title } = useParams();
 	const [filesList, loadFiles] = useState(['']);
 
 	//general state
@@ -43,7 +46,7 @@ export default function SingleBucket(props) {
 
 	useEffect(() => {
 		// Update files in bucket
-		ApiClient.getObjectsList(props.id)
+		ApiClient.getObjectsList(id)
 			.then(result => {
 				setLoad(true);
 				loadFiles(result.data.objects);
@@ -52,7 +55,7 @@ export default function SingleBucket(props) {
 				setError(error);
 			});
 		//get bucket details
-		ApiClient.getSingleBucket(props.id)
+		ApiClient.getSingleBucket(id)
 			.then(result => {
 				setLoad(true);
 				setDetails(result.data.bucket);
@@ -64,12 +67,12 @@ export default function SingleBucket(props) {
 						: setError(error.message);
 				}
 			});
-	}, [props.id]);
+	}, [id]);
 
 	const deleteBucket = () => {
-		ApiClient.deleteBucket(props.id)
+		ApiClient.deleteBucket(id)
 			.then(result => {
-				props.onRemove(props.id);
+				props.onRemove(id);
 			})
 			.catch(error => {
 				if (error.response) {
@@ -81,7 +84,7 @@ export default function SingleBucket(props) {
 	};
 
 	const uploadFile = e => {
-		ApiClient.uploadFile(props.id, e.target.files[0])
+		ApiClient.uploadFile(id, e.target.files[0])
 			.then(result => {
 				loadFiles([...filesList, result.data]);
 				setSuccess('Successfully uploaded object.');
@@ -129,7 +132,7 @@ export default function SingleBucket(props) {
 	};
 
 	const handleFileDelete = () => {
-		ApiClient.deleteFile(props.id, fileSelected)
+		ApiClient.deleteFile(id, fileSelected)
 			.then(result => {
 				//update file list
 				let newFilesList = [...filesList];
@@ -172,7 +175,7 @@ export default function SingleBucket(props) {
 	return (
 		isLoaded && (
 			<Container className="innerWrapper text-left">
-				<h5 className="text-left">{props.title}</h5>
+				<h5 className="text-left">{title}</h5>
 				<button className="text-left" id="back" onClick={props.onBack}>
 					← Back
 				</button>
