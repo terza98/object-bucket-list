@@ -37,7 +37,9 @@ function App() {
 			.catch(error => {
 				setError(error.message);
 			})
-			.finally(() => {});
+			.finally(() => {
+				setLoaded(true);
+			});
 	}, []);
 
 	const handleNewBucket = (name, location) => {
@@ -74,7 +76,7 @@ function App() {
 	};
 
 	if (!loaded) {
-		return <img src={require('./loading.webp')} alt="loading..." />;
+		return <img src={require('./loading.gif')} alt="loading..." />;
 	}
 	return (
 		<div className="App">

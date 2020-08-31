@@ -15,7 +15,7 @@ export default function AllBuckets(props) {
 	}, []);
 
 	if (!loaded) {
-		return <h1>Loading...</h1>;
+		return <img src={require('../loading.gif')} alt="loading..." />;
 	}
 
 	return (
