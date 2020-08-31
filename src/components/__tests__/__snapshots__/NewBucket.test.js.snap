@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <p
+    class="text-left"
+  >
+    Create New Bucket
+  </p>
+  <div
+    class="innerWrapper container"
+  >
+    <form
+      class=""
+    >
+      <div
+        class="row"
+      >
+        <div
+          class="text-left col"
+        >
+          <label
+            class="required form-label"
+          >
+            Bucket Name
+          </label>
+          <input
+            class="form-control"
+            placeholder="MyNewStorage"
+            value=""
+          />
+        </div>
+        <div
+          class="text-left col"
+        >
+          <label
+            class="required form-label"
+          >
+            Bucket Location
+          </label>
+          <select
+            class="form-control"
+          >
+            <option
+              value="0"
+            >
+              Choose...
+            </option>
+            <option />
+          </select>
+        </div>
+      </div>
+      <div
+        class="text-left row"
+      >
+        <button
+          class="btn btn-primary"
+          data-testid="button"
+          style="margin: 15px;"
+          type="button"
+        >
+          Create Bucket
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
