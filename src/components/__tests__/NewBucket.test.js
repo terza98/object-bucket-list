@@ -33,6 +33,13 @@ test('should submit when clicking submit button', () => {
 	const { getByTestId } = render(<NewBucket onSubmit={handleSubmit} />);
 
 	const button = getByTestId('button');
+	const input = getByTestId('input');
+	const select = getByTestId('select');
+
+	fireEvent.change(input, { target: { value: 'New Storage' } });
+	fireEvent.change(select, {
+		target: { value: '541909F3-20FC-4382-A8E8-18042F5E7677' },
+	});
 
 	fireEvent.click(button);
 
