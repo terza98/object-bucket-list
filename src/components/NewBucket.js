@@ -62,6 +62,7 @@ export default function NewBucket(props) {
 							<Form.Control
 								onChange={handleNameChange}
 								value={name}
+								data-testid="input"
 								placeholder="MyNewStorage"
 							/>
 						</Col>
@@ -72,6 +73,7 @@ export default function NewBucket(props) {
 							<Form.Control
 								onChange={handleLocationChange}
 								value={location}
+								data-testid="select"
 								as="select"
 							>
 								<option value="0">Choose...</option>
