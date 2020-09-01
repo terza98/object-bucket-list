@@ -97,6 +97,10 @@ export default function SingleBucket(props) {
 						? setError('Request is badly formatted.')
 						: error.response.status === 404
 						? setError('Required entity cannot be found.')
+						: error.response.status === 409
+						? setError(
+								'The file with this name already exists on the server.',
+						  )
 						: setError(error.message);
 				}
 			})
