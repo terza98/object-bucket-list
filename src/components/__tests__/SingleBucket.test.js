@@ -1,13 +1,15 @@
 import React from 'react';
 import SingleBucket from '../SingleBucket.js';
+
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+
 import history from '../../history.js';
 import { Router, Route } from 'react-router-dom';
 import { useParams, MemoryRouter } from 'react-router-dom';
+
 import {
 	render,
-	act,
 	waitForElementToBeRemoved,
 	screen,
 } from '@testing-library/react';
@@ -72,6 +74,7 @@ describe('<SingleBucket />', () => {
 			screen.getByAltText(/loading.../i),
 		);
 		expect(axios.get).toHaveBeenCalledTimes(2);
+
 		expect(screen.getByTestId('bucket-name')).toBeInTheDocument();
 		expect(screen.getByTestId('bucket-location')).toBeInTheDocument();
 	});
