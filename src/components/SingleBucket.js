@@ -191,6 +191,24 @@ export default function SingleBucket(props) {
 				← Back
 			</button>
 			<Container className="innerWrapper text-left">
+				{error && (
+					<Alert
+						variant="danger"
+						onClose={() => setError('')}
+						dismissible
+					>
+						{typeof error !== 'object' ? error : ''}
+					</Alert>
+				)}
+				{success && (
+					<Alert
+						variant="success"
+						onClose={() => setSuccess('')}
+						dismissible
+					>
+						{typeof success !== 'object' ? success : ''}
+					</Alert>
+				)}
 				<Row>
 					<Col className="text-right">
 						<Modal show={show} onHide={handleClose}>
@@ -262,24 +280,6 @@ export default function SingleBucket(props) {
 					onSelect={k => setKey(k)}
 				>
 					<Tab eventKey="files" title="Files">
-						{error && (
-							<Alert
-								variant="danger"
-								onClose={() => setError('')}
-								dismissible
-							>
-								{typeof error !== 'object' ? error : ''}
-							</Alert>
-						)}
-						{success && (
-							<Alert
-								variant="success"
-								onClose={() => setSuccess('')}
-								dismissible
-							>
-								{typeof success !== 'object' ? success : ''}
-							</Alert>
-						)}
 						<Row style={{ padding: '2%' }}>
 							<p>
 								All files (
