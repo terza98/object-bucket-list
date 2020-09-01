@@ -136,3 +136,12 @@ thead{
   text-decoration: none !important;
 }
 #root{text-align: center;}
+img[alt="loading..."]{
+  position: absolute;
+  left: 31%;
+}
+@media(max-width: 768px){
+  img[alt="loading..."]{
+    width: 34%;
+  }
+}
