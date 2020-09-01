@@ -45,19 +45,19 @@ export default function SingleBucket(props) {
 	};
 
 	useEffect(() => {
+		setLoad(false);
 		// Update files in bucket
 		ApiClient.getObjectsList(id)
 			.then(result => {
-				setLoad(true);
 				loadFiles(result.data.objects);
 			})
 			.catch(error => {
-				setError(error);
-			});
+				setError(error.message);
+			})
+			.finally(() => setLoad(true));
 		//get bucket details
 		ApiClient.getSingleBucket(id)
 			.then(result => {
-				setLoad(true);
 				setDetails(result.data.bucket);
 			})
 			.catch(error => {
@@ -66,7 +66,8 @@ export default function SingleBucket(props) {
 						? setError('Required entity cannot be found.')
 						: setError(error.message);
 				}
-			});
+			})
+			.finally(() => setLoad(true));
 	}, [id]);
 
 	const deleteBucket = () => {
@@ -84,6 +85,7 @@ export default function SingleBucket(props) {
 	};
 
 	const uploadFile = e => {
+		setLoad(false);
 		ApiClient.uploadFile(id, e.target.files[0])
 			.then(result => {
 				loadFiles([...filesList, result.data]);
@@ -97,7 +99,8 @@ export default function SingleBucket(props) {
 						? setError('Required entity cannot be found.')
 						: setError(error.message);
 				}
-			});
+			})
+			.finally(() => setLoad(true));
 	};
 	const handleUpload = () => {
 		fileInput.current.click();
@@ -124,7 +127,9 @@ export default function SingleBucket(props) {
 
 	const totalSize = () => {
 		let total = 0;
-		filesList.map((item, index) => (total += item.size));
+		if (filesList !== undefined)
+			for (let i = 0; i < filesList.length; i++)
+				total += filesList[i].size;
 		return bytesToSize(total);
 	};
 	const handleFileSelect = id => {
@@ -272,7 +277,13 @@ export default function SingleBucket(props) {
 							</Alert>
 						)}
 						<Row style={{ padding: '2%' }}>
-							<p>All files ({filesList.length})</p>
+							<p>
+								All files (
+								{filesList !== undefined
+									? filesList.length
+									: ''}
+								)
+							</p>
 							<Table hover>
 								<thead>
 									<tr>
@@ -282,39 +293,49 @@ export default function SingleBucket(props) {
 									</tr>
 								</thead>
 								<tbody>
-									{filesList
-										.sort(sortFiles)
-										.map((item, index) => (
-											<tr
-												className={
-													fileSelected === item.name
-														? 'selectedObject'
-														: null
-												}
-												onClick={() =>
-													handleFileSelect(item.name)
-												}
-												style={{ cursor: 'pointer' }}
-												key={index}
-											>
-												<td>
-													<span className="bucket-name">
-														{item.name}
-													</span>
-												</td>
-												{item.last_modified !==
-													undefined && (
+									{filesList !== undefined &&
+										[].slice
+											.call(filesList)
+											.sort(sortFiles)
+											.map((item, index) => (
+												<tr
+													className={
+														fileSelected ===
+														item.name
+															? 'selectedObject'
+															: null
+													}
+													onClick={() =>
+														handleFileSelect(
+															item.name,
+														)
+													}
+													style={{
+														cursor: 'pointer',
+													}}
+													key={index}
+												>
 													<td>
-														{formatDate(
-															item.last_modified,
-														)}
+														<span
+															data-testid="object-name"
+															className="object-name"
+														>
+															{item.name}
+														</span>
 													</td>
-												)}
-												<td>
-													{bytesToSize(item.size)}
-												</td>
-											</tr>
-										))}
+													{item.last_modified !==
+														undefined && (
+														<td>
+															{formatDate(
+																item.last_modified,
+															)}
+														</td>
+													)}
+													<td>
+														{bytesToSize(item.size)}
+													</td>
+												</tr>
+											))}
 								</tbody>
 							</Table>
 						</Row>
@@ -325,8 +346,12 @@ export default function SingleBucket(props) {
 								className="text-left"
 								style={{ padding: '2% 4%' }}
 							>
-								<p>Bucket Name: {details.name}</p>
-								<p>Location: {details.location.name}</p>
+								<p data-testid="bucket-name">
+									Bucket Name: {details.name}
+								</p>
+								<p data-testid="bucket-location">
+									Location: {details.location.name}
+								</p>
 								<p>Storage Size: {totalSize()}</p>
 							</div>
 						)}
