@@ -11,7 +11,7 @@ import { Router, Route } from 'react-router-dom';
 import history from './history';
 
 //tests
-import { buckets as bucketList } from './makeTests.js';
+import { buckets as bucketList } from './fetchData.js';
 
 //api
 import axios from 'axios';

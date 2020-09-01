@@ -6,12 +6,11 @@ import {
 	render,
 	fireEvent,
 	act,
-	getByAltText,
 	waitForElementToBeRemoved,
 	screen,
 } from '@testing-library/react';
 import { unmountComponentAtNode } from 'react-dom';
-import { locations } from '../../makeTests.js';
+import { locations } from '../../fetchData.js';
 
 let container = null;
 beforeEach(() => {
