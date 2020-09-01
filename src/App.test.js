@@ -106,4 +106,11 @@ describe('<App />', () => {
 			screen.getByText(`Location: ${location.name}`),
 		).toBeInTheDocument();
 	});
+	it('fetches erroneously data from an API', async () => {
+		const errorMessage = 'Network Error';
+
+		axios.get.mockImplementationOnce(() =>
+			Promise.reject(new Error(errorMessage)),
+		);
+	});
 });

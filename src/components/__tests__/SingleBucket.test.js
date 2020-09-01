@@ -78,4 +78,12 @@ describe('<SingleBucket />', () => {
 		expect(screen.getByTestId('bucket-name')).toBeInTheDocument();
 		expect(screen.getByTestId('bucket-location')).toBeInTheDocument();
 	});
+
+	it('fetches erroneously data from an API', async () => {
+		const errorMessage = 'Network Error';
+
+		axios.get.mockImplementationOnce(() =>
+			Promise.reject(new Error(errorMessage)),
+		);
+	});
 });
