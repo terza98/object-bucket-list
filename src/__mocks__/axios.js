@@ -1,4 +1,4 @@
-import { locations, buckets, objects, bucket } from '../makeTests.js';
+import { locations, buckets, objects, bucket } from '../fetchData.js';
 
 export default {
 	get: jest.fn().mockImplementation(url => {
