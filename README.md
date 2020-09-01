@@ -7,6 +7,11 @@ In the project directory, you can run:
 This will build the full app, and it is one command that sets everything up for production. You need to have docker installed.<br />
 Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
 
+### `docker-compose build`
+
+When rebuilding image, since docker-compose up always runs the inital set up image.<br />
+After this run `docker-compose up` again and view in browser on [http://localhost:8080](http://localhost:8080)
+
 ### `npm instal`
 
 Installs all the needed dependencies after which you can npm start to run the app.
